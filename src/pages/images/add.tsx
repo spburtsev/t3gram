@@ -4,16 +4,18 @@ import { useRef, useState } from "react";
 import FileInput from "~/components/FileInput";
 import StackedLayout from "~/components/StackedLayout";
 import { api } from "~/utils/api";
-import Link from "next/link";
 import DocumentDuplicateIcon from "@heroicons/react/24/outline/DocumentDuplicateIcon";
 import DocumentPlusIcon from "@heroicons/react/24/outline/DocumentPlusIcon";
+import Breadcrumbs from "~/components/Breadcrumbs";
 
-export default function AddFilePage() {
+const labelClassName = "block text-sm font-medium leading-6";
+
+export default function AddImagePage() {
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
-  const m = api.filesRouter.addImage.useMutation({
+  const m = api.imagesRouter.addImage.useMutation({
     mutationKey: ["add-image"],
     onSuccess: () => {
       if (titleRef.current !== null) {
@@ -83,23 +85,20 @@ export default function AddFilePage() {
   };
 
   return (
-    <StackedLayout subNavigation={<SubNavigation />}>
+    <StackedLayout subNavigation={<Breadcrumbs items={breadcrumbs} />}>
       <form
         className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
         onSubmit={handleSubmit}
       >
         <div className="space-y-12">
           <div className="border-b pb-12">
-            <h2 className="text-base font-semibold leading-7">Add file</h2>
+            <h2 className="text-base font-semibold leading-7">Add image</h2>
             <p className="mt-1 text-sm leading-6">
               Upload your image file with a title and description.
             </p>
-            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-              <div className="sm:col-span-full">
-                <label
-                  htmlFor="photo-title"
-                  className="block text-sm font-medium leading-6"
-                >
+            <div className="mt-10 flex flex-col gap-8">
+              <div>
+                <label htmlFor="photo-title" className={labelClassName}>
                   Title
                 </label>
                 <div className="mt-2">
@@ -116,13 +115,8 @@ export default function AddFilePage() {
                 </div>
               </div>
 
-              <div className="col-span-full">
-                <label
-                  htmlFor="photo-input"
-                  className="block text-sm font-medium leading-6"
-                >
-                  Photo
-                </label>
+              <div>
+                <label className={labelClassName}>Photo</label>
                 {file === null || fileUrl === null ? (
                   <FileInput onLoad={handleFileLoad} />
                 ) : (
@@ -144,11 +138,8 @@ export default function AddFilePage() {
                 )}
               </div>
 
-              <div className="col-span-full">
-                <label
-                  htmlFor="description"
-                  className="block text-sm font-medium leading-6"
-                >
+              <div>
+                <label htmlFor="description" className={labelClassName}>
                   Description
                 </label>
                 <div className="mt-2">
@@ -191,21 +182,7 @@ export default function AddFilePage() {
   );
 }
 
-function SubNavigation() {
-  return (
-    <nav className="breadcrumbs px-8 py-4 text-sm">
-      <ul>
-        <li>
-          <Link href="/files">
-            <DocumentDuplicateIcon className="mr-2 h-5 w-5 stroke-current" />
-            Files
-          </Link>
-        </li>
-        <li>
-          <DocumentPlusIcon className="mr-2 h-5 w-5 stroke-current" />
-          Add File
-        </li>
-      </ul>
-    </nav>
-  );
-}
+const breadcrumbs = [
+  { label: "Files", href: "/files", icon: DocumentDuplicateIcon },
+  { label: "Add image", icon: DocumentPlusIcon },
+];

@@ -29,7 +29,7 @@ export const albumsRouter = createTRPCRouter({
         data: {
           title: input.title,
           userId: ctx.session.user.id,
-          files: {
+          images: {
             connect: input.files.map((image) => ({
               id: image,
             })),

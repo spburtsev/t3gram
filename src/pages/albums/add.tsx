@@ -7,22 +7,22 @@ import FolderPlusIcon from "@heroicons/react/24/outline/FolderPlusIcon";
 import Link from "next/link";
 import { useDebounce } from "~/hooks/extras";
 import MagnifyingGlassIcon from "@heroicons/react/24/outline/MagnifyingGlassIcon";
-import FileSearchWithSelections from "~/components/files/FileSearchWithSelection";
+import FileSearchWithSelections from "~/components/images/ImageSearchWithSelection";
 import type { RouterOutputs } from "~/utils/api";
 
-type ImageFile = RouterOutputs["filesRouter"]["searchFiles"][number];
+type ImageFile = RouterOutputs["imagesRouter"]["searchImages"][number];
 
 export default function AddFilePage() {
   const titleRef = useRef<HTMLInputElement>(null);
-  const chosenFiles = useArray<ImageFile>();
-  const [fileSearch, setFileSearch] = useState("");
-  const debouncedFileSearch = useDebounce(fileSearch, 200);
+  const chosenImages = useArray<ImageFile>();
+  const [imageSearch, setImageSearch] = useState("");
+  const debouncedImageSearch = useDebounce(imageSearch, 200);
   const m = api.albumsRouter.addAlbum.useMutation({
     onSuccess: () => {
       if (titleRef.current !== null) {
         titleRef.current.value = "";
       }
-      chosenFiles.clear();
+      chosenImages.clear();
       alert("Album created!");
     },
     onError: (error) => {
@@ -38,7 +38,7 @@ export default function AddFilePage() {
     }
     m.mutate({
       title,
-      files: chosenFiles.items.map((file) => file.id),
+      files: chosenImages.items.map((file) => file.id),
     });
   };
 
@@ -94,16 +94,16 @@ export default function AddFilePage() {
                       type="search"
                       name="search"
                       id="search"
-                      value={fileSearch}
-                      onChange={(e) => setFileSearch(e.target.value)}
+                      value={imageSearch}
+                      onChange={(e) => setImageSearch(e.target.value)}
                       className="input w-full py-1.5 pl-9"
                       placeholder="Search files by title"
                     />
                   </div>
                 </div>
                 <FileSearchWithSelections
-                  search={debouncedFileSearch}
-                  chosenFiles={chosenFiles}
+                  search={debouncedImageSearch}
+                  chosenFiles={chosenImages}
                 />
               </div>
             </div>

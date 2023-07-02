@@ -1,37 +1,34 @@
 import { type UseArrayReturn } from "~/hooks/inputs";
 import { api } from "~/utils/api";
 import ErrorAlert from "../ErrorAlert";
-import SelectableFileCard from "./SelectableFileCard";
+import SelectableFileCard from "./SelectableImageCard";
 import type { RouterOutputs } from "~/utils/api";
+import CenteredLoadingSpinner from "../CenteredLoadingSpinner";
 
-type ImageFile = RouterOutputs["filesRouter"]["searchFiles"][number];
+type ImageFile = RouterOutputs["imagesRouter"]["searchImages"][number];
 
-export default function FileSearchWithSelections(props: {
+export default function ImageSearchWithSelections(props: {
   search: string;
   chosenFiles: UseArrayReturn<ImageFile>;
 }) {
   const {
-    data: files,
+    data: images,
     isError,
     isLoading,
     error,
-  } = api.filesRouter.searchFiles.useQuery({
+  } = api.imagesRouter.searchImages.useQuery({
     search: props.search,
   });
 
   if (isLoading) {
-    return (
-      <div className="mt-6 flex items-center">
-        <span className="loading loading-ring loading-lg mx-auto"></span>
-      </div>
-    );
+    return <CenteredLoadingSpinner />;
   }
 
   if (isError) {
     return <ErrorAlert message={error.message} />;
   }
 
-  if (files.length === 0) {
+  if (images.length === 0) {
     return (
       <p className="text-base-content-secondary mt-6 text-center">
         No files found.
@@ -59,15 +56,15 @@ export default function FileSearchWithSelections(props: {
         role="list"
         className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8"
       >
-        {files.map((file) => (
+        {images.map((image) => (
           <SelectableFileCard
-            key={file.id}
-            file={file}
+            key={image.id}
+            image={image}
             selected={
-              props.chosenFiles.items.find((item) => item.id === file.id) !==
+              props.chosenFiles.items.find((item) => item.id === image.id) !==
               undefined
             }
-            onToggleSelected={() => handleToggleSelected(file)}
+            onToggleSelected={() => handleToggleSelected(image)}
           />
         ))}
       </ul>

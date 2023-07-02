@@ -1,25 +1,25 @@
 import type { RouterOutputs } from "~/utils/api";
 import Image from "next/image";
 
-type ImageFile = RouterOutputs["filesRouter"]["searchFiles"][number];
+type ImageFile = RouterOutputs["imagesRouter"]["searchImages"][number];
 
-export default function RemovableFileCard({
-  file,
+export default function RemovableImageCard({
+  image,
   onRemove,
 }: {
-  file: ImageFile;
+  image: ImageFile;
   onRemove: () => void;
 }) {
   return (
-    <label htmlFor={file.id}>
+    <label htmlFor={image.id}>
       <li className="card-compact card overflow-hidden bg-base-100 shadow-xl">
         <figure className="relative">
           <Image
-            src={file.fileUrl}
+            src={image.fileUrl}
             width={1920}
             height={1024}
             className="h-36 w-full cursor-pointer object-cover sm:h-48 md:h-56 lg:h-64 lg:w-full"
-            alt={file.title}
+            alt={image.title}
           />
           <button
             type="button"
@@ -43,7 +43,7 @@ export default function RemovableFileCard({
           </button>
         </figure>
         <div className="card-body">
-          <h2 className="card-title">{file.title}</h2>
+          <h2 className="card-title">{image.title}</h2>
         </div>
       </li>
     </label>

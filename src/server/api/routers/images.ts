@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
-export const filesRouter = createTRPCRouter({
-  getRecentFiles: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.prisma.file.findMany({
+export const imagesRouter = createTRPCRouter({
+  getRecentImages: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.prisma.image.findMany({
       where: {
         userId: ctx.session.user.id,
       },
@@ -13,14 +13,27 @@ export const filesRouter = createTRPCRouter({
       take: 3,
     });
   }),
-  searchFiles: protectedProcedure
+  getImageById: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const image = await ctx.prisma.image.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+      if (!image) {
+        throw new Error("Image not found");
+      }
+      return image;
+    }),
+  searchImages: protectedProcedure
     .input(
       z.object({
         search: z.string(),
       })
     )
     .query(async ({ ctx, input }) => {
-      return ctx.prisma.file.findMany({
+      return ctx.prisma.image.findMany({
         where: {
           userId: ctx.session.user.id,
           title: {
@@ -42,7 +55,7 @@ export const filesRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.prisma.file.create({
+      return ctx.prisma.image.create({
         data: {
           title: input.title,
           description: input.description,

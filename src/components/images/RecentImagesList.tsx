@@ -1,31 +1,28 @@
 import { api } from "~/utils/api";
 import ErrorAlert from "../ErrorAlert";
-import RecentFileCard from "./RecentFileCard";
+import RecentImageCard from "./RecentImageCard";
+import CenteredLoadingSpinner from "../CenteredLoadingSpinner";
 
 export default function RecentFilesList() {
   const {
-    data: files,
+    data: images,
     error,
     isError,
     isLoading,
-  } = api.filesRouter.getRecentFiles.useQuery();
+  } = api.imagesRouter.getRecentImages.useQuery();
 
   if (isLoading) {
-    return (
-      <div className="mt-2 flex items-center">
-        <span className="loading loading-ring loading-lg mx-auto"></span>
-      </div>
-    );
+    return <CenteredLoadingSpinner />;
   }
 
   if (isError) {
     return <ErrorAlert message={error.message} />;
   }
 
-  if (files.length === 0) {
+  if (images.length === 0) {
     return (
       <p className="text-base-content-secondary mt-2 text-center">
-        No files yet.
+        No images yet.
       </p>
     );
   }
@@ -35,8 +32,8 @@ export default function RecentFilesList() {
       role="list"
       className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8"
     >
-      {files.map((file, fileIdx) => (
-        <RecentFileCard key={fileIdx} file={file} />
+      {images.map((image, imageIdx) => (
+        <RecentImageCard key={imageIdx} image={image} />
       ))}
     </ul>
   );

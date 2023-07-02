@@ -1,6 +1,7 @@
 import { api } from "~/utils/api";
 import ErrorAlert from "../ErrorAlert";
 import RecentAlbumItem from "./RecentAlbumItem";
+import CenteredLoadingSpinner from "../CenteredLoadingSpinner";
 
 export default function RecentAlbumsList() {
   const {
@@ -11,11 +12,7 @@ export default function RecentAlbumsList() {
   } = api.albumsRouter.getRecentAlbums.useQuery();
 
   if (isLoading) {
-    return (
-      <div className="mt-2 flex items-center">
-        <span className="loading loading-ring loading-lg mx-auto"></span>;
-      </div>
-    );
+    return <CenteredLoadingSpinner />;
   }
 
   if (isError) {

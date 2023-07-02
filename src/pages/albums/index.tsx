@@ -1,9 +1,10 @@
+
 import StackedLayout from "~/components/StackedLayout";
 
-export default function FilesPage() {
+export default function AlbumsPage() {
   return (
     <StackedLayout>
-      <h2 className="text-primary-content">Files</h2>
+      <h2 className="bg-base-100">Albums</h2>
     </StackedLayout>
   );
 }

@@ -26,8 +26,8 @@ import Image from "next/image";
 const navigationLinks = [
   { name: "Dashboard", href: "/dashboard", icon: HomeIcon },
   {
-    name: "Files",
-    href: "/files",
+    name: "Images",
+    href: "/images",
     icon: DocumentDuplicateIcon,
   },
   { name: "Albums", href: "/albums", icon: FolderIcon },

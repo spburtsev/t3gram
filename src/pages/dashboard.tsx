@@ -2,7 +2,7 @@ import StackedLayout from "~/components/StackedLayout";
 import PlusSmallIcon from "@heroicons/react/24/outline/PlusSmallIcon";
 import Link from "next/link";
 import { type ReactNode } from "react";
-import RecentFilesList from "~/components/files/RecentFilesList";
+import RecentImagesList from "~/components/images/RecentImagesList";
 import RecentAlbumsList from "~/components/albums/RecentAlbumsList";
 
 export default function DashboardPage() {
@@ -10,11 +10,11 @@ export default function DashboardPage() {
     <StackedLayout>
       <div className="space-y-16 xl:space-y-20">
         <RecentItemsSection
-          title={"Recent files"}
-          addItemText="New file"
-          addItemUrl="/files/add"
+          title={"Recent images"}
+          addItemText="New image"
+          addItemUrl="/images/add"
         >
-          <RecentFilesList />
+          <RecentImagesList />
         </RecentItemsSection>
         <RecentItemsSection
           title={"Recent albums"}

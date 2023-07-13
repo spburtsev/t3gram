@@ -28,7 +28,7 @@ export default function RecentAlbumsList() {
   }
 
   return (
-    <ul role="list" className="-mx-2 mt-2 space-y-1">
+    <ul role="list" className="mt-6 space-y-1">
       {albums.map((album, albumIdx) => (
         <RecentAlbumItem key={albumIdx} album={album} />
       ))}

@@ -1,4 +1,5 @@
 import StackedLayout from "~/components/StackedLayout";
+import { protectedSsr } from "~/utils/protected-ssr";
 
 export default function FilesPage() {
   return (
@@ -7,3 +8,5 @@ export default function FilesPage() {
     </StackedLayout>
   );
 }
+
+export const getServerSideProps = protectedSsr();

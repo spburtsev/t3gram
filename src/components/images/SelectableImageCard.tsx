@@ -17,8 +17,8 @@ export default function SelectableImageCard({
     <label htmlFor={image.id}>
       <li
         className={classNames(
-          "card-compact card overflow-hidden bg-base-100 shadow-xl",
-          selected ? "border-2 border-primary" : "border-2 border-transparent"
+          "card-compact card overflow-hidden border-2 bg-base-100 shadow-xl",
+          selected ? "border-primary" : "border-transparent"
         )}
       >
         <figure className="relative">

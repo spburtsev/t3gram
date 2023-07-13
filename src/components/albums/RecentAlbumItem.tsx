@@ -12,11 +12,11 @@ export default function RecentAlbumItem(props: { album: RecentAlbum }) {
       <Link
         href={albumUrl}
         className={classNames(
-          "group flex gap-x-3 rounded-md bg-base-300 p-4 font-semibold leading-6 hover:bg-base-200 items-center",
+          "flex items-center gap-x-3 rounded-md bg-base-200 p-4 font-semibold leading-6 hover:bg-base-300",
           colorTransition
         )}
       >
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-accent text-accent font-medium">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-accent font-medium text-accent">
           {props.album.initial}
         </span>
         <span className="truncate">{props.album.title}</span>

@@ -9,6 +9,7 @@ import { useDebounce } from "~/hooks/extras";
 import MagnifyingGlassIcon from "@heroicons/react/24/outline/MagnifyingGlassIcon";
 import FileSearchWithSelections from "~/components/images/ImageSearchWithSelection";
 import type { RouterOutputs } from "~/utils/api";
+import { protectedSsr } from "~/utils/protected-ssr";
 
 type ImageFile = RouterOutputs["imagesRouter"]["searchImages"][number];
 
@@ -149,3 +150,5 @@ function SubNavigation() {
     </nav>
   );
 }
+
+export const getServerSideProps = protectedSsr();

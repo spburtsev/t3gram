@@ -1,8 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import {
-  type GetServerSidePropsContext,
-  type InferGetServerSidePropsType,
-} from "next";
+import { type InferGetServerSidePropsType } from "next";
 import { useState } from "react";
 import CenteredLoadingSpinner from "~/components/CenteredLoadingSpinner";
 import ErrorAlert from "~/components/ErrorAlert";
@@ -10,6 +7,7 @@ import StackedLayout from "~/components/StackedLayout";
 import ModeButton from "~/features/image-editor/ModeButton";
 import { EditorMode, editorModeButtons } from "~/features/image-editor/modes";
 import { api } from "~/utils/api";
+import { protectedSsr } from "~/utils/protected-ssr";
 
 export default function ImageEditPage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>
@@ -79,18 +77,20 @@ export default function ImageEditPage(
   );
 }
 
-export function getServerSideProps(ctx: GetServerSidePropsContext) {
-  const imageId = ctx.query.imageId;
+export const getServerSideProps = protectedSsr<{ imageId: string }>({
+  // eslint-disable-next-line @typescript-eslint/require-await
+  getProps: async (ctx) => {
+    const imageId = ctx.query.imageId;
+    if (typeof imageId !== "string") {
+      return {
+        notFound: true,
+      };
+    }
 
-  if (typeof imageId !== "string") {
     return {
-      notFound: true,
+      props: {
+        imageId,
+      },
     };
-  }
-
-  return {
-    props: {
-      imageId,
-    },
-  };
-}
+  },
+});

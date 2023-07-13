@@ -1,20 +1,22 @@
+import dynamic from "next/dynamic";
 import { useUploadThing } from "~/hooks/uploadthing";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import FileInput from "~/components/FileInput";
 import StackedLayout from "~/components/StackedLayout";
 import { api } from "~/utils/api";
 import DocumentDuplicateIcon from "@heroicons/react/24/outline/DocumentDuplicateIcon";
 import DocumentPlusIcon from "@heroicons/react/24/outline/DocumentPlusIcon";
-import Breadcrumbs from "~/components/Breadcrumbs";
+import { useFileWithUrl } from "~/hooks/inputs";
+import { protectedSsr } from "~/utils/protected-ssr";
 
+const Breadcrumbs = dynamic(() => import("~/components/Breadcrumbs"));
 const labelClassName = "block text-sm font-medium leading-6";
 
 export default function AddImagePage() {
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
-  const [file, setFile] = useState<File | null>(null);
-  const [fileUrl, setFileUrl] = useState<string | null>(null);
+  const { file, fileUrl, setFile, removeFile } = useFileWithUrl();
   const m = api.imagesRouter.addImage.useMutation({
     mutationKey: ["add-image"],
     onSuccess: () => {
@@ -24,29 +26,13 @@ export default function AddImagePage() {
       if (descriptionRef.current !== null) {
         descriptionRef.current.value = "";
       }
-      handleFileRemove();
+      removeFile();
       alert("image added successfully");
     },
     onError: () => {
       alert("error occurred while uploading");
     },
   });
-
-  const handleFileLoad = (file: File) => {
-    setFile(file);
-    if (fileUrl !== null) {
-      URL.revokeObjectURL(fileUrl);
-    }
-    setFileUrl(URL.createObjectURL(file));
-  };
-
-  const handleFileRemove = () => {
-    setFile(null);
-    if (fileUrl !== null) {
-      URL.revokeObjectURL(fileUrl);
-    }
-    setFileUrl(null);
-  };
 
   const { startUpload, isUploading } = useUploadThing({
     endpoint: "imageUploader",
@@ -118,12 +104,12 @@ export default function AddImagePage() {
               <div>
                 <label className={labelClassName}>Photo</label>
                 {file === null || fileUrl === null ? (
-                  <FileInput onLoad={handleFileLoad} />
+                  <FileInput onLoad={setFile} />
                 ) : (
                   <div className="relative">
                     <button
                       className="btn-ghost btn-sm absolute right-0 top-0"
-                      onClick={handleFileRemove}
+                      onClick={removeFile}
                     >
                       Remove
                     </button>
@@ -186,3 +172,5 @@ const breadcrumbs = [
   { label: "Files", href: "/files", icon: DocumentDuplicateIcon },
   { label: "Add image", icon: DocumentPlusIcon },
 ];
+
+export const getServerSideProps = protectedSsr();

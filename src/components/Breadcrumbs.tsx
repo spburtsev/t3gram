@@ -4,7 +4,7 @@ import { type HeroIcon } from "~/utils/client";
 export type BreadcrumbItem = {
   label: string;
   href?: string;
-  icon: HeroIcon;
+  icon?: HeroIcon;
 };
 
 const iconClassName = "mr-2 h-5 w-5 stroke-current";
@@ -26,15 +26,23 @@ function BreadcrumbItem(props: { item: BreadcrumbItem }) {
     <li>
       {props.item.href ? (
         <Link href={props.item.href}>
-          <props.item.icon className={iconClassName} />
-          {props.item.label}
+          <BreadcrumbViewedItem item={props.item} />
         </Link>
       ) : (
-        <>
-          <props.item.icon className={iconClassName} />
-          {props.item.label}
-        </>
+        <BreadcrumbViewedItem item={props.item} />
       )}
     </li>
+  );
+}
+
+function BreadcrumbViewedItem(props: { item: BreadcrumbItem }) {
+  if (!props.item.icon) {
+    return <>{props.item.label}</>;
+  }
+  return (
+    <>
+      <props.item.icon className={iconClassName} />
+      {props.item.label}
+    </>
   );
 }

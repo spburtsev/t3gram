@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import { prisma } from "~/server/db";
 
 export const albumsRouter = createTRPCRouter({
   getRecentAlbums: protectedProcedure.query(async ({ ctx }) => {
@@ -37,4 +38,32 @@ export const albumsRouter = createTRPCRouter({
         },
       });
     }),
+  getAlbumImages: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const album = await ctx.prisma.album.findUniqueOrThrow({
+        where: {
+          id: input,
+        },
+        include: {
+          images: true,
+        },
+      });
+      if (album.userId !== ctx.session.user.id) {
+        throw new Error("You have no permission to view this album");
+      }
+      return album.images;
+    }),
 });
+
+export async function getAlbumTitleFromPrisma(albumId: string, userId: string) {
+  const album = await prisma.album.findUniqueOrThrow({
+    where: {
+      id: albumId,
+    },
+  });
+  if (album.userId !== userId) {
+    throw new Error("You have no permission to view this");
+  }
+  return album.title;
+}
